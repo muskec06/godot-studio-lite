@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="58" height="72" viewBox="0 0 58 72">
-<!-- Cini seridi, yatayda tekrar eder (TextureRect stretch_mode tile). -->
+<!-- Tile band (cini), repeats horizontally (TextureRect stretch_mode tile). -->
 <rect x="0" y="0" width="58" height="72" fill="{{tile_dark}}"/>
 <rect x="0" y="0" width="58" height="4" fill="{{tile_line}}"/>
 <rect x="0" y="68" width="58" height="4" fill="{{tile_line}}"/>

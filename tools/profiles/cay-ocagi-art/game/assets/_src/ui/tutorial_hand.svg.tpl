@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
-<!-- Ogretici el. Isaret parmagi ucu yaklasik (120,40): dokunma noktasi. -->
+<!-- Tutorial hand. The index fingertip at about (120,40) is the tap point. -->
 <g transform="translate(120 40) rotate(-18.33)" fill="{{hand_skin}}" stroke="{{hand_line}}" stroke-width="5" stroke-linejoin="round">
 <rect x="-40" y="92" width="128" height="128" rx="44"/>
 <rect x="16" y="82" width="32" height="64" rx="16"/><rect x="44" y="92" width="32" height="64" rx="16"/><rect x="70" y="104" width="32" height="64" rx="16"/>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="1600" viewBox="0 0 720 1600">
-<!-- Oyun ekrani arka plani 720x1600: duvar, pencere isigi, cini seridi, tezgah, alt panel. Uzun telefonlarda alttan uzar; ust kenara hizala. -->
+<!-- Game screen background 720x1600: wall, window light, tile band, counter, bottom panel. Taller phones show more at the bottom; align to the top edge. -->
 <defs>
 <linearGradient id="wall" x1="0" y1="0" x2="0" y2="297.09" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="{{wall_top}}"/><stop offset="1" stop-color="{{wall_bottom}}"/></linearGradient>
 <radialGradient id="light" cx="115.34" cy="45.44" r="332.04" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="{{window_light}}" stop-opacity="0.75"/><stop offset="1" stop-color="{{window_light}}" stop-opacity="0"/></radialGradient>

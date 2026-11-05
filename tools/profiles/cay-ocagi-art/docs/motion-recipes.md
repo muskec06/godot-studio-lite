@@ -52,7 +52,7 @@ after it, remove it from `src`. Several same-colour layers move together.)
   1/3), alpha `sin(π·u)·0.55`, rising 80% of glass width while drifting
   sideways `sin(j·0.7 + t·2.2)·7%`; width 5.5% of glass width, thinning 40%.
   `props/steam_wisp.svg` as a `GPUParticles2D` texture is the cheap version.
-- **Level complete:** "Bölüm tamam!" pill (`ui_gold` / `ui_banner_text`),
+- **Level complete:** "Bölüm tamam!" ("Level complete!") pill (`ui_gold` / `ui_banner_text`),
   scale 0 → 1 with back-out over 0.35 s; sugar rain: 20 cubes, 1.7 s, fall
   with `q²` acceleration, gentle spin and sway, fade out in the last 20%.
 - **Stuck (no moves):** shake ±16 px at 70 Hz decaying over 0.45 s, dim the
