@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+<!-- Renk koru modu anahtari ikonu. -->
+<path d="M20,50 Q50,24 80,50 Q50,76 20,50 Z" fill="none" stroke="{{btn_icon}}" stroke-width="7" stroke-linejoin="round"/>
+<circle cx="50" cy="50" r="10" fill="{{btn_icon}}"/>
+</svg>

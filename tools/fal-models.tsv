@@ -1,0 +1,17 @@
+# fal.ai models this project may call. The fal-budget hook refuses any other
+# endpoint, so a new model is added here deliberately, after checking its page
+# shows the "Commercial use" badge and its current price.
+#
+# Columns (tab-separated): endpoint, role, unit, usd_per_unit, checked
+#   unit: image (× num_images, × resolution factor) · second · minute (rounded up) · call
+#   Resolution factor for image models: 0.5K ×0.75 · 1K ×1 · 2K ×1.5 · 4K ×2
+# Prices from fal.ai model pages, checked 2026-11-05. Prices change: the artist
+# agent re-checks with get_pricing before a batch and updates this file.
+endpoint	role	unit	usd_per_unit	checked
+fal-ai/nano-banana-2/edit	image-ref	image	0.08	2026-11-05
+fal-ai/nano-banana-2	image	image	0.08	2026-11-05
+fal-ai/nano-banana-pro/edit	image-hero	image	0.15	2026-11-05
+fal-ai/bria/background/remove	bg-remove	image	0.018	2026-11-05
+fal-ai/elevenlabs/sound-effects/v2	sfx	second	0.002	2026-11-05
+fal-ai/minimax-music/v2.6	music	call	0.15	2026-11-05
+fal-ai/elevenlabs/music	music-long	minute	0.80	2026-11-05

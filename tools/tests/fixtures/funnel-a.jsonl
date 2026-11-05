@@ -1,0 +1,8 @@
+{"t":1762333000.1,"uid":"p1","sid":"s1","e":"session_start","version":"","platform":"Android","locale":"tr"}
+{"t":1762333001.0,"uid":"p1","sid":"s1","e":"level_start","level":1}
+{"t":1762333031.0,"uid":"p1","sid":"s1","e":"level_complete","level":1,"seconds":30.0,"moves":12}
+{"t":1762333032.0,"uid":"p1","sid":"s1","e":"level_start","level":2}
+{"t":1762333062.0,"uid":"p1","sid":"s1","e":"level_fail","level":2,"seconds":30.0}
+{"t":1762333063.0,"uid":"p1","sid":"s1","e":"level_start","level":2}
+{"t":1762333113.0,"uid":"p1","sid":"s1","e":"level_complete","level":2,"seconds":50.0}
+{"t":1762333114.0,"uid":"p1","sid":"s1","e":"ad_rewarded","placement":"extra_tube","earned":true}

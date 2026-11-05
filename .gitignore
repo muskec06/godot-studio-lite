@@ -1,0 +1,24 @@
+# Godot
+game/.godot/
+game/export/
+*.translation
+export_presets.cfg.bak
+
+# Claude Code, per developer
+.claude/settings.local.json
+.claude/agent-memory-local/
+CLAUDE.local.md
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.env*
+
+# Mobile signing and builds — never commit keys
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+builds/

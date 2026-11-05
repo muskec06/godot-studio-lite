@@ -1,0 +1,4 @@
+# Autoloads this profile registers in game/project.godot (Name res://path)
+App res://scripts/mobile/app.gd
+Purchases res://scripts/monetization/purchases.gd
+Ads res://scripts/monetization/ads.gd

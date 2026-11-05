@@ -1,0 +1,115 @@
+# Android build in GitHub's cloud. Runs by hand (Actions → Android build →
+# Run workflow) and on version tags (v1.0.0). Produces a debug build always,
+# and a signed release build when the release keystore secrets exist.
+#
+# Needs: game/export_presets.cfg with an Android preset (create it in the
+# editor and commit it — Godot keeps passwords in .godot/export_credentials.cfg,
+# which is not committed). Release signing secrets (Settings → Secrets → Actions):
+#   ANDROID_KEYSTORE_BASE64   base64 of the release .keystore/.jks
+#   ANDROID_KEYSTORE_USER     key alias
+#   ANDROID_KEYSTORE_PASSWORD keystore password
+# Experimental: check the first run's log and adjust JAVA_VERSION if Godot's
+# Android export docs ask for another JDK.
+name: Android build
+
+on:
+  workflow_dispatch:
+    inputs:
+      preset:
+        description: Export preset name
+        default: Android
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+env:
+  GODOT_VERSION: "4.7.2"
+  JAVA_VERSION: "17"
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PRESET: ${{ github.event.inputs.preset || 'Android' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check export preset
+        run: |
+          f=game/export_presets.cfg
+          [ -f "$f" ] || { echo "::error::game/export_presets.cfg missing — add an Android preset in the editor and commit it."; exit 1; }
+          grep -q "name=\"$PRESET\"" "$f" || { echo "::error::No export preset named \"$PRESET\" in $f."; exit 1; }
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Cache Godot and export templates
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot
+            ~/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable
+          key: godot-android-${{ env.GODOT_VERSION }}
+
+      - name: Install Godot and export templates
+        run: |
+          if [ ! -x ~/godot/godot ]; then
+            mkdir -p ~/godot
+            curl -fsSL -o /tmp/godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+            unzip -q /tmp/godot.zip -d ~/godot
+            mv ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 ~/godot/godot
+            chmod +x ~/godot/godot
+          fi
+          T=~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          if [ ! -f "$T/version.txt" ]; then
+            curl -fsSL -o /tmp/templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+            mkdir -p "$T" /tmp/tpl
+            unzip -q /tmp/templates.tpz -d /tmp/tpl
+            mv /tmp/tpl/templates/* "$T/"
+          fi
+          sed -i -E "s|^godot_bin:[^#]*|godot_bin: \"$HOME/godot/godot\"  |" project.yaml
+
+      - name: Import project
+        run: |
+          # Godot reads the SDK from ANDROID_HOME and Java from JAVA_HOME when it
+          # first creates editor settings; the runner provides both.
+          echo "ANDROID_HOME=${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
+          bash tools/setup-godot.sh
+
+      - name: Debug build
+        run: |
+          f=game/export_presets.cfg
+          ext=apk; grep -qE '^gradle_build/export_format=1' "$f" && ext=aab
+          extra=""; grep -qE '^gradle_build/use_gradle_build=true' "$f" && extra="--install-android-build-template"
+          mkdir -p builds/android
+          ~/godot/godot --headless --path game $extra --export-debug "$PRESET" "$PWD/builds/android/game-debug.$ext"
+          ls -la builds/android
+
+      - name: Release build (when signing secrets exist)
+        env:
+          KS_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KS_USER: ${{ secrets.ANDROID_KEYSTORE_USER }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -z "$KS_B64" ]; then echo "::notice::No release keystore secrets — release build skipped."; exit 0; fi
+          echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_PATH="$RUNNER_TEMP/release.keystore"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_USER="$KS_USER"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD="$KS_PASS"
+          f=game/export_presets.cfg
+          ext=apk; grep -qE '^gradle_build/export_format=1' "$f" && ext=aab
+          extra=""; grep -qE '^gradle_build/use_gradle_build=true' "$f" && extra="--install-android-build-template"
+          ~/godot/godot --headless --path game $extra --export-release "$PRESET" "$PWD/builds/android/game-release.$ext"
+          rm -f "$RUNNER_TEMP/release.keystore"
+          ls -la builds/android
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-builds
+          path: builds/android/
+          if-no-files-found: error

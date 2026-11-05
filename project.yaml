@@ -1,0 +1,16 @@
+# Godot Studio Lite — project settings. Flat `key: value` lines only:
+# hooks read this file with grep, so keep one key per line, no nesting.
+
+name: ""                 # game title, set by /start
+godot_version: "4.7"     # the version you build with
+godot_bin: ""            # path to the Godot executable; empty = look for godot / godot4 on PATH
+language: gdscript       # gdscript | csharp
+platform: desktop        # desktop | mobile  (mobile: bash tools/apply-profile.sh mobile)
+orientation: landscape   # landscape | portrait (mobile only)
+languages: en tr         # player-facing languages, first = source (tools/l10n.sh)
+mode: jam                # jam | project  (see CLAUDE.md "The loop")
+test_framework: gdunit4  # gdunit4 | none
+main_scene: ""           # e.g. res://scenes/main.tscn, set by /start
+art_style: pixel         # pixel | illustrated  (details in docs/art-style.md, set by /art-style)
+asset_budget_usd: 20     # fal.ai spend cap; the fal-budget hook refuses calls past it
+read_guard_kb: 40       # whole-file reads above this size in docs/ and production/ are refused

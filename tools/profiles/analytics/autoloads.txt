@@ -1,0 +1,2 @@
+# Autoloads this profile registers in game/project.godot (Name res://path)
+Analytics res://scripts/analytics/analytics.gd

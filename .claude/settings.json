@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Bash(bash .claude/hooks/*)",
+      "Bash(bash tools/*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(godot --headless *)",
+      "Bash(godot4 --headless *)",
+      "mcp__fal__search_models",
+      "mcp__fal__get_model_schema",
+      "mcp__fal__get_pricing",
+      "mcp__fal__search_docs",
+      "mcp__fal__recommend_model",
+      "mcp__fal__check_job",
+      "mcp__fal__get_job_result"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(rm -r *)",
+      "Bash(sudo *)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Bash(git clean -df*)",
+      "Read(**/.env*)",
+      "Edit(**/.env*)",
+      "Edit(**/*.import)",
+      "Edit(game/.godot/**)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      { "matcher": "", "hooks": [ { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.sh\"", "timeout": 10 } ] }
+    ],
+    "PreCompact": [
+      { "matcher": "", "hooks": [ { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-compact.sh\"", "timeout": 10 } ] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Read", "hooks": [ { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/read-guard.sh\"", "timeout": 5 } ] },
+      { "matcher": "mcp__fal__run_model|mcp__fal__submit_job", "hooks": [ { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/fal-budget.sh\" pre", "timeout": 5 } ] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Write|Edit|MultiEdit", "hooks": [
+        { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/gd-check.sh\"", "timeout": 60 },
+        { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/svg-guard.sh\"", "timeout": 10 }
+      ] },
+      { "matcher": "mcp__fal__run_model|mcp__fal__submit_job", "hooks": [ { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/fal-budget.sh\" post", "timeout": 5 } ] }
+    ],
+    "Stop": [
+      { "matcher": "", "hooks": [ { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-stop.sh\"", "timeout": 5 } ] }
+    ]
+  }
+}
